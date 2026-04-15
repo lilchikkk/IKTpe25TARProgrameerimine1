@@ -1,53 +1,58 @@
 ﻿@model IEnumerable<University.ViewModel.StudentIndexViewModel>
 
 @{
-    ViewBag["Title"] = "Student Index";
+    ViewData["Title"] = "Student Index";
 }
-<h2>Student Index<h2/>
+
+<h2>Student Index</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
-    <h4>Student</h4>
-    <hr />
 
- <table class="table">
+<h4>Student</h4>
+<hr />
+
+<table class="table">
     <thead>
         <tr>
-                <th class="col-sm-10">
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <>th class ="col-sm-10>
-                    @Html.DisplayFor(model => model.FirstMidName)
-                </th>
-                <>th class ="col-sm-10>
-                    @Html.DisplayFor(model => model.EnrollmentDate)
-                </th>
-            </td>
-        <thead>
+            <th class="col-sm-10">
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
 
-        <tbody
-            @foreach (var item in Model)
-            {
+            <th class="col-sm-10">
+                @Html.DisplayNameFor(model => model.FirstMidName)
+            </th>
+           
+            <th class="col-sm-10">
+                @Html.DisplayNameFor(model => model.EnrollmentDate)
+            </th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                  <td class="col-sm-10">
-                        @Html.DisplayNameFor(model => model.LastName)
-                    </td>
-                    <>td class ="col-sm-10>
-                        @Html.DisplayFor(model => model.FirstMidName)
-                    </td>
-                    <td class ="col-sm-10>
-                        @Html.DisplayFor(model => model.EnrollmentDate)
-                    </td>
-                    </td>
-                        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                        <a asp-action="Details" asp-route-id="@Model.Id">Details</a>
-                        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-                  </td>
-              </tr>
-            }
-        </tbody>
-     </table> 
+                <td class="col-sm-10">
+                    @Html.DisplayFor(model => item.LastName)
+                </td>
 
-
+                <td class="col-sm-10">
+                    @Html.DisplayFor(model => item.FirstMidName)
+                </td>
+           
+                <td class="col-sm-10">
+                    @Html.DisplayFor(model => item.LastName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        
+        }
+    </tbody>
+</table>
