@@ -133,12 +133,6 @@ namespace University.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var student = await _context.Students
-               .Include(s => s.Enrollments)
-               //Kui tahad uuesti objeti kasutada objekti sees, siis kasutad ThenInclude
-               .ThenInclude(e => e.Course)
-               //andmeid ei salvestata vähemällu ja ei jälgita
-               .AsNoTracking()
-               // Leiab esimese elemendi andmetes, mis on tingimuse välja toodud 
                .FirstOrDefaultAsync(m => m.Id == id);
 
 
