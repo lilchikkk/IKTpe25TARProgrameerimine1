@@ -153,5 +153,81 @@ namespace University.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(StudentUpdateViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var student = new Models.Student
+                {
+                    Id = vm.Id,
+                    LastName = vm.LastName,
+                    FirstMidName = vm.FirstMidName,
+                    EnrollmentDate = vm.EnrollmentDate
+                };
+
+                var studentUpdate = student.Id;
+                //lisame student'i andmebaasi ja salvestame muudatuse
+                _context.Update(student);
+                //miks kasutame await?
+                //kui me kasutame await, siis me ootame kuni salvestamine on lõpetatud
+                await _context.SaveChangesAsync();
+
+                // kui andmed uuendatud , iis suunab tagasi Update vaatesse, kus saab kohe uuesti andmeid uendada.
+                //Hetkel suunab <indexi vaatesse peale uuendust
+                return RedirectToAction(nameof(Update),  new {id = studentUpdate});
+            }
+
+            return RedirectToAction(nameof(Update));
+        }
+
+        //tehke Delete Get meetod koos vaatega
+        // GET: Student/Delete/5
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Students
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new StudentDeleteViewModel
+            {
+                Id = student.Id,
+                LastName = student.LastName,
+                FirstMidName = student.FirstMidName,
+                EnrollmentDate = student.EnrollmentDate
+            };
+
+            return View(vm);
+        }
+
+        // POST: Student/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
