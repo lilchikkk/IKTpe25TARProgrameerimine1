@@ -26,7 +26,7 @@ namespace University.Controllers
             //kui me kasutame await, siis me ootame kuni päring on lõpetatud
             //ja saame tulemuse, enne kui me jätkame koodi kirjutamist
             var result = await _context.Students
-                .Select(s => new ViewModel.StudentIndexViewModel
+                .Select(s => new StudentIndexViewModel
                 {
                     Id = s.Id,
                     LastName = s.LastName,
@@ -183,7 +183,6 @@ namespace University.Controllers
         }
 
         //tehke Delete Get meetod koos vaatega
-        // GET: Student/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -192,42 +191,66 @@ namespace University.Controllers
                 return NotFound();
             }
 
+
             var student = await _context.Students
+                .Include(s => s.Enrollments)
+                    .ThenInclude(e => e.Course)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (student == null)
-            {
-                return NotFound();
-            }
 
             var vm = new StudentDeleteViewModel
             {
                 Id = student.Id,
                 LastName = student.LastName,
                 FirstMidName = student.FirstMidName,
-                EnrollmentDate = student.EnrollmentDate
+                EnrollmentDate = student.EnrollmentDate,
+                EnrollmentsVm = (student.Enrollments ?? Enumerable.Empty<Enrollment>())
+                    .Select(x => new EnrollmentViewModel
+                    {
+                        CourseId = x.CourseId,
+                        Grade = x.Grade,
+                        CourseVm = new CourseViewModel
+                        {
+                            CourseId = x.Course?.CourseId ?? 0,
+                            Title = x.Course?.Title,
+                            Credits = x.Course?.Credits ?? 0
+                        }
+                    }).ToArray()
             };
-
-            return View(vm);
-        }
-
-        // POST: Student/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var student = await _context.Students.FindAsync(id);
 
             if (student == null)
             {
                 return NotFound();
             }
 
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
+            return View(vm);
         }
+
+        //tuleb teha ankeedi kustutamise nupp
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            try
+            {
+                Student delete = new Student()
+                {
+                    Id = id,
+                };
+
+                _context.Students.Remove(delete);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true });
+                throw;
+            }
+
+            return RedirectToAction(nameof(Delete));
+
+        }
+
     }
 }
