@@ -11,6 +11,14 @@
 </p>
 
 
+<form asp-action="Index", method="get">
+<div>
+     <input type="text" name="searchString" placeholder="Seach..." value="@ViewData["CurrentFilter"]" />
+     <button type="submit">Search</button>
+</div>
+</form>
+
+
 <h4>Student</h4>
 <hr />
 
