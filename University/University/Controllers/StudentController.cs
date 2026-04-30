@@ -23,33 +23,7 @@ namespace University.Controllers
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : ""; 
             ViewData["DateSortParm"] = sortOrder == "Date" ? "name_desc" : "Date";
 
-            var students = from s in _context.Students
-                           select s;
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
-                    break;
-
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
-                    break;
-
-                case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
-                    break;
-
-                default:
-                    students = students.OrderBy(s => s.LastName);
-                    break;
-            }
-
-            //leiame kõik student'id ja teisendame need StudentIndexViewModel'iks
-            //miks peab kasutama await?
-            //kui me kasutame await, siis me ootame kuni päring on lõpetatud
-            //ja saame tulemuse, enne kui me jätkame koodi kirjutamist
-            var result = await _context.Students
+            var students = await _context.Students
                 .Select(s => new StudentIndexViewModel
                 {
                     Id = s.Id,
@@ -59,8 +33,26 @@ namespace University.Controllers
                     //miks kasutame ToListAsync()?
                     //kui me kasutame ToListAsync(), siis saame tulemuse listina
                 }).ToListAsync();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.LastName).ToList();
+                    break;
 
-            return View(result);
+                case "Date":
+                    students = students.OrderBy(s => s.EnrollmentDate).ToList();
+                    break;
+
+                case "date_desc":
+                    students = students.OrderByDescending(s => s.EnrollmentDate).ToList();
+                    break;
+
+                default:
+                    students = students.OrderBy(s => s.LastName).ToList();
+                    break;
+            }
+
+            return View(students);
         }
         public async Task<IActionResult> Details(int? id)
         {
