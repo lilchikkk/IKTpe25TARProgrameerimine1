@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Models;
+using University.Ultilities;
 using University.ViewModel;
 
 namespace University.Controllers
@@ -18,12 +19,20 @@ namespace University.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, int ? pageNumber, string currentFilter)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : ""; 
             ViewData["DateSortParm"] = sortOrder == "Date" ? "name_desc" : "Date";
             ViewData["CurrentFilter"] = searchString;
 
+            if (searchString !=  null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             var students = await _context.Students
                 .Select(s => new StudentIndexViewModel
                 {
@@ -60,7 +69,11 @@ namespace University.Controllers
                     break;
             }
 
-            return View(students);
+            var result = await students.ToListAsync();
+
+            int pageSize = 3;
+
+            return View(await PaginatedList<StudentIndexViewModel>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         public async Task<IActionResult> Details(int? id)
         {
