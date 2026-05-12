@@ -21,8 +21,8 @@ namespace University.Utilities
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
             var count = await source.CountAsync();
+            pageIndex = Math.Max(1, pageIndex); // ei lase alla 1 minna
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            //lõppu on vaja teha return
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
 

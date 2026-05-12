@@ -1,0 +1,31 @@
+﻿@model IEnumerable<University.ViewModel.EnrollmentDateGroupViewModel>
+
+@{
+    ViewData["Title"] = "About";
+}
+
+<h2>Student Body Statistics</h2>
+
+<table class="table table-hover" style="max-width: 400px;">
+    <thead>
+        <tr>
+            <th>Enrollment Date</th>
+            <th>Students</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var group in Model)
+        {
+            <tr>
+                <td>@group.EnrollmentDate.ToString("dd-MMM-yy")</td>
+                <td>@group.StudentCount</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot class="table-secondary fw-bold">
+        <tr>
+            <td>Total</td>
+            <td>@Model.Sum(x => x.StudentCount)</td>
+        </tr>
+    </tfoot>
+</table> 

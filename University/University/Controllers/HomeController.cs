@@ -45,6 +45,9 @@ namespace University.Controllers
                     EnrollmentDate = dateGroup.Key,
                     StudentCount = dateGroup.Count(),
                 };
+
+            //Teha About vaade, mis kuvab üliõpilastele arvu registreerimise kuupäeva järgi.
+
             return View(await data.AsNoTracking().ToListAsync());
         }
     }
