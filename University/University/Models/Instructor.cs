@@ -13,11 +13,11 @@ namespace University.Models
         //mis on icollection????
         // ICollection on nimekiri - One-to-Many seos
         // üks õpetaja saab õpetada MITMEID kursusi
-        public ICollection<CourseAssigment> CourseAssigments { get; set; }
+        public ICollection<CourseAssignment> CourseAssigments { get; set; }
 
         //miks ei saa kasutada icollection, vaid lihtsalt officeAssigment
         // One-to-One seos - õpetajal saab olla ainult ÜKS kontor
         // seepärast ei kasuta ICollection-it, vaid lihtsalt objekti
-        public OfficeAssigment OfficeAssigments { get; set; }
+        public OfficeAssignment OfficeAssignments { get; set; }
     }
 }
