@@ -14,6 +14,11 @@ namespace University.ViewModel
         public int Credits { get; set; }
         public int DepartmentId { get; set; }
 
-        public Department Department { get; set; }
+        public CourseDepartmentIndexViewModel Department { get; set; }
+    }
+
+    public class CourseDepartmentIndexViewModel
+    {
+        public string DepartmentName { get; set; }
     }
 }
