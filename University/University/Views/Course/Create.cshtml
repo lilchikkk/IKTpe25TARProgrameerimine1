@@ -1,0 +1,35 @@
+﻿@model University.ViewModel.CoursesVM.CourseCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Course";
+}
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="CourseId" class="control-label"></label>
+        <input asp-for="CourseId" class="form-control" />
+        <span asp-validation-for="CourseId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Credits" class="control-label"></label>
+        <input asp-for="Credits" class="form-control" />
+        <span asp-validation-for="Credits" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentId" class="control-label"></label>
+        <input asp-for="DepartmentId" class="form-control" />
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

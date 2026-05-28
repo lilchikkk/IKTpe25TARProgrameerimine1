@@ -1,19 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 using University.Data;
+using University.Models;
 using University.ViewModel;
+using University.ViewModel.CoursesVM;
 
 namespace University.Controllers
 {
     public class CourseController : Controller
     {
-        //on vaja kututada välja Univercity constructor 
-        private readonly UniversityContext _context;
-        public CourseController
-         (
-             UniversityContext context
-         )
+        //on vaja kutsuda välja  University constructor 
 
+        private readonly UniversityContext _context;
+
+        public CourseController
+
+            (
+                 UniversityContext context
+            )
         {
             _context = context;
         }
@@ -32,10 +40,36 @@ namespace University.Controllers
                     {
                         DepartmentName = c.Departments.Name
                     }
-                 });
+                });
 
             return View(course);
 
+        }
+
+
+        //UPDATE:
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var vm = await _context.Courses
+                .Where(c => c.CourseId == id)
+                .Select(c => new CourseUpdateViewModel
+                {
+                    CourseId = c.CourseId,
+                    Credits = c.Credits,
+                    Title = c.Title,
+                    Department = new CourseDepartmentIndexViewModel
+                    {
+                        DepartmentName = c.Departments != null ? c.Departments.Name : null
+                    }
+                })
+                .FirstOrDefaultAsync();
+
+            return View(vm);
         }
     }
 }
