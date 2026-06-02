@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -94,6 +95,70 @@ namespace University.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        //CREATE
+        public IActionResult Create()
+        {
+            PopulateDepartmentDropDownnList();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CourseCreateViewModel vm)
+        {
+            var course = new Course
+            {
+                CourseId = vm.CourseId,
+                Credits = vm.Credits,
+                Title = vm.Title,
+                Departments = new Department
+                {
+                    Name = vm.Department.Name
+                }
+            };
+
+            _context.Add(course);
+            await _context.SaveChangesAsync();
+
+            PopulateDepartmentDropDownnList(course.DepartmentId);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            var course = await _context.Courses
+                .Include(c => c.Departments)
+                .Where(c => c.CourseId == id)
+                .Select(c => new CourseDetailsViewModel
+                {
+                    CourseId = c.CourseId,
+                    Credits = c.Credits,
+                    Title = c.Title,
+                    Department = new CourseDepartmentIndexViewModel
+                    {
+                        DepartmentName = c.Departments.Name
+                    }
+                })
+                .FirstOrDefaultAsync();
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            return View(course);
+        }
+
+        private void PopulateDepartmentDropDownnList(object selectedDepartment = null)
+        {
+            var departmentQuery = from d in _context.Departments
+                                  orderby d.Name
+                                  select d;
+            ViewBag.DepartmentId = new SelectList(departmentQuery
+                .AsNoTracking(), "DepartmentId", "Name", selectedDepartment);
         }
     }
 }
