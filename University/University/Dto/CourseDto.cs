@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using University.ViewModel.CoursesVM;
 
-namespace University.Models
+namespace University.Dto
 {
-    public class Course
+    public class CourseDto
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CourseId { get; set; }
@@ -13,11 +14,8 @@ namespace University.Models
         [NotMapped]
         public List<IFormFile> Files { get; set; }
 
-        public IEnumerable<FileToApi> FilesToApi { get; set; }
-            = new List<FileToApi>();
-
-        public Department Departments { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
-        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        [NotMapped]
+        public IEnumerable<ImageViewModel> FilesToApi { get; set; }
+            = new List<ImageViewModel>();
     }
 }
