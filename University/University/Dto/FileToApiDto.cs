@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using University.ViewModel.CoursesVM;
-
-namespace University.Models
+﻿namespace University.Dto
 {
     public class FileToApiDto
     {
         public Guid Id { get; set; }
         public string? ExistingFilepath { get; set; }
-        public Guid? CourseId { get; set; }
+        public int CourseId { get; set; }
     }
 }

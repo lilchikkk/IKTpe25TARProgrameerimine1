@@ -12,5 +12,6 @@ namespace University.ViewModel.CoursesVM
         public int Credits { get; set; }
         public int DepartmentId { get; set; }
         public CourseDepartmentIndexViewModel Department { get; set; }
+        public List<ImageViewModel> Images { get; set; } = new List<ImageViewModel>();
     }
 }

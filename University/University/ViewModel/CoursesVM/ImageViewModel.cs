@@ -2,8 +2,7 @@
 {
     public class ImageViewModel
     {
-        public Guid ImageId { get; set; }
-        public string? FilePath { get; set; }
-        public Guid? CourceId { get; set; }
+        public Guid Id { get; set; }
+        public string? ExistingFilepath { get; set; }
     }
 }

@@ -4,7 +4,9 @@
     ViewData["Title"] = "Create Course";
 }
 
-<form asp-action="Create">
+<h2>Create Course</h2>
+
+<form asp-action="Create" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="CourseId" class="control-label"></label>
         <input asp-for="CourseId" class="form-control" />
@@ -23,15 +25,23 @@
     <div class="form-group">
         <label asp-for="DepartmentId" class="control-label"></label>
         <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId">
-            <option value =""> --Select Department -- </option>
+            <option value="">--Select Department--</option>
         </select>
         <span asp-validation-for="DepartmentId" class="text-danger"></span>
     </div>
+
+
     <div class="form-group">
+        <label asp-for="Files" class="control-label">Upload Files</label>
+        <input asp-for="Files" type="file" class="form-control" multiple />
+        <span asp-validation-for="Files" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
 
-<div>
+<div class="mt-2">
     <a asp-action="Index">Back to List</a>
 </div>
