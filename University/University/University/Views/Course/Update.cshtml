@@ -1,0 +1,63 @@
+﻿@model University.ViewModel.CourseVM.CourseUpdateViewModel
+
+@{
+    ViewData["Title"] = "Update Course";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <form asp-action="Update" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="CourseId" />
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Credits" class="control-label"></label>
+            <input asp-for="Credits" class="form-control" />
+            <span asp-validation-for="Credits" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Department" class="control-label"></label>
+            <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId">
+                <option value="">-- Select Department --</option>
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+
+        <hr />
+        <br />
+
+        <div class="form-group btn">
+            <input asp-for="FileToApis" type="file" multiple />
+        </div>
+
+        <br />
+        <hr />
+
+        <h3>Files</h3>
+
+        @if (Model.Files != null && Model.Files.Count > 0)
+        {
+            foreach (var file in Model.Files)
+            {
+                var photoPaths = "~/multipleFileUpload/" + (@file.FilePath ?? "noimage.jpg");
+
+                <div class="form-group row col-sm-4 offset-2"> 
+                <div>@file.FilePath</div> 
+                <img class="card-image-top" src="@photoPaths" asp-append-version="true" /> </div>
+                <a asp-action="RemoveFile" asp-route-imageId="@file.ImageId">Remove file</a>
+            }
+        }
+        else
+        {
+            <p>No files uploaded</p>
+        }
+        <br />
+        <div class="form-group">
+            <a asp-action="Index">Back to List</a> |
+            <input type="submit" value="Update" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

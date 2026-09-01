@@ -1,0 +1,63 @@
+﻿@model University.ViewModel.CourseVM.CourseDeleteViewModel
+
+@{
+    ViewData["Title"] = "Course Delete";
+}
+
+<h2>Course Delete</h2>
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CourseId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CourseId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Credits)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Credits)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Department)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DepartmentId)
+        </dd>
+    </dl>
+
+    <h3>Files</h3>
+
+    @if (Model.Files != null && Model.Files.Count > 0)
+    {
+        foreach (var file in Model.Files)
+        {
+            var photoPaths = "~/multipleFileUpload/" + (@file.FilePath ?? "noimage.jpg");
+
+            <div class="form-group row col-sm-4 offset-2">
+                <div>@file.FilePath</div>
+                <img class="card-image-top" src="@photoPaths" asp-append-version="true" />
+            </div>
+        }
+    }
+    else
+    {
+        <p>No files uploaded</p>
+    }
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CourseId" />        
+        <a asp-action="Index">Back to List</a> |
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </form>
+
+</div>
